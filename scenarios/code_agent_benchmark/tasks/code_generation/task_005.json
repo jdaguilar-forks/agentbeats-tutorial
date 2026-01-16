@@ -1,0 +1,29 @@
+{
+    "id": "code_gen_005",
+    "category": "code_generation",
+    "difficulty": "hard",
+    "title": "Find Common Elements in Nested Lists",
+    "description": "From a list of integers, remove all elements that occur more than once. Keep order of elements left the same as in the input.",
+    "specification": {
+        "function_name": "remove_duplicates",
+        "parameters": [
+            {
+                "name": "numbers",
+                "type": "List[int]"
+            }
+        ],
+        "return_type": "List[int]",
+        "constraints": []
+    },
+    "prompt": "from typing import List\n\ndef remove_duplicates(numbers: List[int]) -> List[int]:\n    \"\"\" From a list of integers, remove all elements that occur more than once.\n    Keep order of elements left the same as in the input.\n    >>> remove_duplicates([1, 2, 3, 2, 4])\n    [1, 3, 4]\n    \"\"\"\n    pass",
+    "test_code": "def test_remove_duplicates():\n    assert remove_duplicates([]) == []\n    assert remove_duplicates([1, 2, 3, 4]) == [1, 2, 3, 4]\n    assert remove_duplicates([1, 2, 3, 2, 4, 3, 5]) == [1, 4, 5]",
+    "reference_solution": "from typing import List\nfrom collections import Counter\n\ndef remove_duplicates(numbers: List[int]) -> List[int]:\n    c = Counter(numbers)\n    return [n for n in numbers if c[n] <= 1]",
+    "metadata": {
+        "time_limit_seconds": 60,
+        "max_tokens": 1000,
+        "tags": [
+            "arrays",
+            "hash-tables"
+        ]
+    }
+}

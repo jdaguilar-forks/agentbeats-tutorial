@@ -1,0 +1,29 @@
+{
+    "id": "code_gen_004",
+    "category": "code_generation",
+    "difficulty": "medium",
+    "title": "Check Palindrome",
+    "description": "Write a function that checks if a given string is a palindrome (reads the same forwards and backwards).",
+    "specification": {
+        "function_name": "is_palindrome",
+        "parameters": [
+            {
+                "name": "text",
+                "type": "str"
+            }
+        ],
+        "return_type": "bool",
+        "constraints": []
+    },
+    "prompt": "def is_palindrome(text: str) -> bool:\n    \"\"\" Checks if given string is a palindrome\n    >>> is_palindrome('')\n    True\n    >>> is_palindrome('aba')\n    True\n    >>> is_palindrome('aaaaa')\n    True\n    >>> is_palindrome('zbcd')\n    False\n    \"\"\"\n    pass",
+    "test_code": "def test_is_palindrome():\n    assert is_palindrome('') == True\n    assert is_palindrome('aba') == True\n    assert is_palindrome('aaaaa') == True\n    assert is_palindrome('zbcd') == False\n    assert is_palindrome('xywyx') == True\n    assert is_palindrome('xywyz') == False\n    assert is_palindrome('xywzx') == False",
+    "reference_solution": "def is_palindrome(text: str) -> bool:\n    for i in range(len(text)):\n        if text[i] != text[len(text) - 1 - i]:\n            return False\n    return True",
+    "metadata": {
+        "time_limit_seconds": 60,
+        "max_tokens": 800,
+        "tags": [
+            "strings",
+            "algorithms"
+        ]
+    }
+}

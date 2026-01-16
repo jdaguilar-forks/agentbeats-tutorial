@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy agent source
+COPY scenarios/code_agent_benchmark/agent/src /app/src
+
+# Install dependencies
+RUN pip install --no-cache-dir \
+    a2a-sdk[http-server]>=0.3.20 \
+    httpx>=0.28.1 \
+    pydantic>=2.11.9 \
+    python-dotenv>=1.1.1 \
+    litellm>=1.0.0
+
+WORKDIR /app/src
+
+ENTRYPOINT ["python", "server.py"]

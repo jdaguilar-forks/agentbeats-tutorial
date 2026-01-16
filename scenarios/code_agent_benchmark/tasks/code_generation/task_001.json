@@ -1,0 +1,33 @@
+{
+    "id": "code_gen_001",
+    "category": "code_generation",
+    "difficulty": "easy",
+    "title": "Check if String Has Balanced Parentheses",
+    "description": "Write a function that checks if a string has balanced parentheses. The function should return True if every opening parenthesis has a matching closing parenthesis in the correct order, and False otherwise.",
+    "specification": {
+        "function_name": "has_close_elements",
+        "parameters": [
+            {
+                "name": "numbers",
+                "type": "List[float]"
+            },
+            {
+                "name": "threshold",
+                "type": "float"
+            }
+        ],
+        "return_type": "bool",
+        "constraints": []
+    },
+    "prompt": "from typing import List\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \"\"\" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \"\"\"\n    pass",
+    "test_code": "def test_has_close_elements():\n    assert has_close_elements([1.0, 2.0, 3.0], 0.5) == False\n    assert has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3) == True\n    assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.3) == True\n    assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.05) == False\n    assert has_close_elements([1.0, 2.0, 5.9, 4.0, 5.0], 0.95) == True\n    assert has_close_elements([1.0, 2.0, 5.9, 4.0, 5.0], 0.8) == False\n    assert has_close_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0], 0.1) == True",
+    "reference_solution": "from typing import List\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    for idx, elem in enumerate(numbers):\n        for idx2, elem2 in enumerate(numbers):\n            if idx != idx2:\n                distance = abs(elem - elem2)\n                if distance < threshold:\n                    return True\n    return False",
+    "metadata": {
+        "time_limit_seconds": 60,
+        "max_tokens": 1000,
+        "tags": [
+            "arrays",
+            "iteration"
+        ]
+    }
+}
