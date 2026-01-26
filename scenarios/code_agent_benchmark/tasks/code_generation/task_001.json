@@ -2,8 +2,8 @@
     "id": "code_gen_001",
     "category": "code_generation",
     "difficulty": "easy",
-    "title": "Check if String Has Balanced Parentheses",
-    "description": "Write a function that checks if a string has balanced parentheses. The function should return True if every opening parenthesis has a matching closing parenthesis in the correct order, and False otherwise.",
+    "title": "Check if Numbers Have Close Elements",
+    "description": "Write a function that checks if in a given list of numbers, any two numbers are closer to each other than a given threshold. The function should return True if such a pair exists, and False otherwise.",
     "specification": {
         "function_name": "has_close_elements",
         "parameters": [

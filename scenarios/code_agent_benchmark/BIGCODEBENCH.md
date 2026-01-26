@@ -132,6 +132,28 @@ To test the full integration:
    - Multi-file code changes
 
 ---
+ 
+ ## 🔧 Troubleshooting
+ 
+ ### Common Issues
+ 
+ **1. "NameError: name 'task_func' is not defined"**
+ This means the code agent failed to generate valid code.
+ - **Cause**: LLM generation failed or returned empty content.
+ - **Reason (OpenRouter)**: Likely a **429 Rate Limit** on the free model tier.
+ - **Fix**: Check `debug_openrouter.py` output. Try a different model or wait.
+ 
+ **2. OpenRouter Reliability**
+ Free models like `google/gemini-2.0-flash-exp:free` are often rate-limited.
+ - **Verify**: Run `uv run python scenarios/code_agent_benchmark/debug_openrouter.py`
+ - **Solution**: Switch to `openrouter/openai/gpt-4o-mini` (requires credits) or another free model in `scenario_bigcodebench.toml`.
+ 
+ ```toml
+ # In scenario_bigcodebench.toml
+ cmd = "... --model openrouter/openai/gpt-4o-mini"
+ ```
+ 
+ ---
 
 ## Stats Comparison
 

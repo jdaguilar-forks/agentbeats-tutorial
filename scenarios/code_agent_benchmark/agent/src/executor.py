@@ -27,7 +27,7 @@ TERMINAL_STATES = {
 
 
 class Executor(AgentExecutor):
-    def __init__(self, model: str = "gpt-4o-mini"):
+    def __init__(self, model: str = "qwen/qwen3-coder:free"):
         self.agents: dict[str, Agent] = {}
         self.model = model
 

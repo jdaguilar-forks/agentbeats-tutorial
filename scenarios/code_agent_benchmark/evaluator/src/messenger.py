@@ -2,7 +2,7 @@
 
 import httpx
 from a2a.types import Message
-from a2a.utils import new_task, new_user_text_message
+from a2a.utils import new_task, new_agent_text_message
 
 
 class Messenger:
@@ -13,23 +13,40 @@ class Messenger:
         self.active_tasks: dict[str, str] = {}
 
     async def talk_to_agent(self, prompt: str, agent_url: str) -> str:
-        """Send a message to an agent and get the response text."""
-        message = new_user_text_message(prompt)
+        """Send a message to an agent and get the response text (file path)."""
+        message = new_agent_text_message(prompt)
         task = new_task(message)
 
-        response = await self.client.post(
-            f"{agent_url}/tasks",
-            json={
+        # Wrap in JSON-RPC 2.0
+        payload = {
+            "jsonrpc": "2.0",
+            "method": "message/send",
+            "params": {
                 "message": message.model_dump(mode="json"),
-                "task": task.model_dump(mode="json"),
             },
+            "id": "1",
+        }
+
+        response = await self.client.post(
+            f"{agent_url.rstrip('/')}/",
+            json=payload,
         )
         response.raise_for_status()
 
-        # Extract text from response
+        # Extract text from response (could be code or file path)
         response_data = response.json()
-        if "parts" in response_data:
-            for part in response_data["parts"]:
+        result = response_data.get("result")
+        if not result:
+            return ""
+
+        # Result can be a Message or a Task according to A2A spec
+        # Handle Task (standard for many A2A scenarios)
+        if "status" in result and result["status"].get("message"):
+            result = result["status"]["message"]
+
+        # Handle Message (or Task's status message)
+        if "parts" in result:
+            for part in result["parts"]:
                 if "text" in part:
                     return part["text"]
 

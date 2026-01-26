@@ -32,6 +32,7 @@ class TaskResult(BaseModel):
     task_title: str
     score: float
     passed: bool
+    generated_code: str | None = None
     details: dict[str, Any]
 
 
@@ -49,8 +50,12 @@ class Agent:
     required_roles: list[str] = ["code_agent"]
     required_config_keys: list[str] = []  # category is optional if source is specified
 
-    def __init__(self):
+    def __init__(self, model: str = None):
         self.messenger = Messenger()
+        self.model = model
+
+        if self.model:
+            logger.info(f"Initialized evaluator with model: {self.model}")
 
         # Determine tasks directory for JSON tasks
         script_dir = Path(__file__).parent
@@ -75,7 +80,7 @@ class Agent:
         if missing_config_keys:
             return False, f"Missing config keys: {missing_config_keys}"
 
-        category = request.config.get("category")
+        category = request.config.get("category", "code_generation")
         if category not in self.evaluators:
             return (
                 False,
@@ -203,6 +208,7 @@ Important: Return ONLY the complete Python code, including imports if needed. Do
                         task_title=task["title"],
                         score=eval_result["score"],
                         passed=eval_result["passed"],
+                        generated_code=submission,
                         details=eval_result["details"],
                     )
                     task_results.append(task_result)
@@ -222,6 +228,7 @@ Important: Return ONLY the complete Python code, including imports if needed. Do
                         task_title=task["title"],
                         score=0.0,
                         passed=False,
+                        generated_code=None,
                         details={"error": str(e)},
                     )
                     task_results.append(task_result)

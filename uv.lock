@@ -46,8 +46,10 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "a2a-sdk", extra = ["http-server"] },
+    { name = "datasets" },
     { name = "httpx" },
     { name = "pydantic" },
+    { name = "pytest" },
     { name = "python-dotenv" },
     { name = "uvicorn" },
 ]
@@ -70,6 +72,9 @@ tau2-evaluator = [
 ]
 
 [package.dev-dependencies]
+code-benchmark = [
+    { name = "litellm" },
+]
 dev = [
     { name = "mypy" },
 ]
@@ -77,6 +82,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "a2a-sdk", extras = ["http-server"], specifier = ">=0.3.20" },
+    { name = "datasets", specifier = ">=4.5.0" },
     { name = "datasets", marker = "extra == 'code-benchmark'", specifier = ">=2.14.0" },
     { name = "google-genai", marker = "extra == 'debate'", specifier = ">=1.36.0" },
     { name = "httpx", specifier = ">=0.28.1" },
@@ -84,6 +90,7 @@ requires-dist = [
     { name = "litellm", marker = "extra == 'tau2-agent'", specifier = ">=1.0.0" },
     { name = "nest-asyncio", marker = "extra == 'tau2-evaluator'", specifier = ">=1.6.0" },
     { name = "pydantic", specifier = ">=2.11.9" },
+    { name = "pytest", specifier = ">=9.0.1" },
     { name = "pytest", marker = "extra == 'code-benchmark'", specifier = ">=8.0.0" },
     { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "tau2", marker = "extra == 'tau2-evaluator'", git = "https://github.com/sierra-research/tau2-bench.git" },
@@ -92,6 +99,7 @@ requires-dist = [
 provides-extras = ["debate", "tau2-agent", "tau2-evaluator", "code-benchmark"]
 
 [package.metadata.requires-dev]
+code-benchmark = [{ name = "litellm", specifier = ">=1.80.7" }]
 dev = [{ name = "mypy", specifier = ">=1.18.1" }]
 
 [[package]]

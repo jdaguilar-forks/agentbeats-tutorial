@@ -2,6 +2,7 @@
 
 import logging
 from typing import Dict, Any
+from pathlib import Path
 from evaluators.base import BaseEvaluator
 from utils.test_runner import TestRunner
 
@@ -26,9 +27,58 @@ class CodeGenerationEvaluator(BaseEvaluator):
         """
         test_code = task.get("test_code", "")
 
+        # Check if submission is a file path
+        import os
+
+        if os.path.exists(submission) and submission.endswith(".py"):
+            logger.info(f"Reading code from file: {submission}")
+            try:
+                with open(submission, "r") as f:
+                    code_content = f.read()
+                logger.info(f"Read {len(code_content)} characters from file")
+                submission = code_content
+            except Exception as e:
+                logger.error(f"Failed to read code from file {submission}: {e}")
+                return {
+                    "score": 0.0,
+                    "passed": False,
+                    "details": {
+                        "tests_passed": 0,
+                        "tests_failed": 0,
+                        "test_pass_rate": 0.0,
+                        "errors": [f"Failed to read code file: {e}"],
+                        "test_output": f"File read error: {e}",
+                    },
+                }
+
+        # Save debug artifacts
+        try:
+            debug_dir = Path("scenarios/code_agent_benchmark/debug")
+            debug_dir.mkdir(exist_ok=True, parents=True)
+
+            task_id = task["id"]
+            # Save generated code
+            with open(debug_dir / f"{task_id}_generated.py", "w") as f:
+                f.write(submission)
+
+            # Save test code
+            with open(debug_dir / f"{task_id}_test.py", "w") as f:
+                f.write(test_code)
+
+            logger.info(f"Saved debug files to {debug_dir}")
+        except Exception as e:
+            logger.warning(f"Failed to save debug files: {e}")
+
         # Run tests
         logger.info(f"Running tests for task {task['id']}")
         test_results = self.test_runner.run_tests(submission, test_code)
+
+        # Save test output
+        try:
+            with open(debug_dir / f"{task_id}_results.txt", "w") as f:
+                f.write(test_results["output"])
+        except Exception:
+            pass
 
         # Calculate scores
         tests_passed = test_results["passed"]
