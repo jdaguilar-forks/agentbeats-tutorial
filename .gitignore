@@ -7,3 +7,6 @@ __pycache__/
 
 # tau2-bench data (downloaded via setup.sh)
 scenarios/tau2/tau2-bench/
+
+# code agent benchmark debug
+scenarios/code_agent_benchmark/debug

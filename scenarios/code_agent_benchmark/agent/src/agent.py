@@ -86,10 +86,7 @@ Include all necessary imports at the top of your response."""
                         raise ValueError("Empty response from LLM")
 
                     content = response.choices[0].message.content.strip()
-                    if len(code_solution) == 0:
-                        raise ValueError("Empty code content in response")
-
-                    if len(code_solution) == 0:
+                    if len(content) == 0:
                         raise ValueError("Empty code content in response")
 
                     code_solution = content
