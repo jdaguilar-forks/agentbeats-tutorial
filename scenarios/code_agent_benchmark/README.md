@@ -1,58 +1,76 @@
 # AI Code Agent Benchmark
 
-A comprehensive, multi-source evaluation suite for testing AI agents on realistic Python coding tasks.
+A robust, multi-source evaluation suite for testing AI coding agents on realistic Python tasks. This benchmark supports both industry-standard datasets and local custom task suites, all within a standardized inter-agent communication framework.
 
-## 🌟 Key Features
+---
 
-- **Interactive Wizard**: Effortlessly configure providers (OpenAI, Anthropic, Gemini, OpenRouter) and models via a guided CLI.
-- **BigCodeBench Integration**: Support for the industry-standard `bigcodebench` dataset (standard-library-only subset).
-- **Flexible Task Sources**: Toggle between standard BigCodeBench tasks and local custom JSON tasks.
-- **Modular Architecture**: Separate responsibilities for UI, configuration, orchestration, and reporting.
-- **A2A Protocol**: Fully standardized inter-agent communication using JSON-RPC 2.0.
+## ⚡ Quickstart
 
-## 🚀 Getting Started
+Get up and running in less than 2 minutes.
 
 ### 1. Installation
-Ensure you have `uv` installed, then sync the environment:
+Ensure you have `uv` installed, then synchronize the environment:
 ```bash
 uv sync
 ```
 
-### 2. Launch the Wizard
-The simplest way to run a benchmark is using the interactive wizard:
+### 2. Configure API Keys (Optional but Recommended)
+Create a `.env` file in the project root with your provider keys:
+```bash
+# Example .env content
+OPENAI_API_KEY=sk-...
+OPENROUTER_API_KEY=sk-or-...
+```
+
+### 3. Launch the Interactive Wizard
+Run the guided configuration tool to select your models and task source:
 ```bash
 uv run python scenarios/code_agent_benchmark/run_interactive.py
 ```
-The wizard will:
-- Let you choose providers and models for both the **Generator** and **Evaluator**.
-- Check for missing API keys and help you save them to `.env`.
-- Allow you to select the task source (**BigCodeBench** or **Local**).
-- Automatically update configurations and launch the benchmark.
+The wizard will handle setting up the `scenario_bigcodebench.toml` and launching the benchmark for you.
+
+---
+
+## 🌟 Key Features
+
+- **Interactive Wizard**: A guided CLI to configure providers (OpenAI, OpenRouter, etc.), models, and task sources without editing TOML files manually.
+- **BigCodeBench Integration**: Built-in support for the `BigCodeBench` (StdLib) dataset, offering 300+ high-quality Python coding tasks.
+- **Modular Architecture**: Clean separation of responsibilities between the **UI**, **Configuration**, **Orchestration** (Green Agent), and **Generation** (Purple Agent).
+- **Extensible Task Sources**: Easily switch between standard benchmarks and your own custom JSON tasks in `tasks/code_generation`.
+- **A2A Protocol**: Standardized inter-agent communication using JSON-RPC 2.0.
+
+---
 
 ## 📂 Project Structure
 
-- **`wizard/`**: Modular package handling the interactive CLI and configuration logic.
-- **`agent/`**: The "Purple Agent" source — a baseline LLM-driven code generator.
-- **`evaluator/`**: The "Green Agent" source — orchestrates the benchmark and evaluates submissions.
-- **`tasks/`**: Directory for local custom benchmark tasks in JSON format.
-- **`scenario_bigcodebench.toml`**: The main configuration file used by `agentbeats-run`.
+- **`wizard/`**: The core logic for the interactive configuration and launch sequence.
+- **`agent/`**: The "Purple Agent" — a reference LLM-driven code generation agent.
+- **`evaluator/`**: The "Green Agent" — handles task loading, execution orchestration, and results reporting.
+- **`tasks/`**: Custom local benchmark tasks.
+- **`scenario_bigcodebench.toml`**: The main configuration file for `agentbeats-run`.
+
+---
 
 ## 🛠️ Advanced Usage
 
-### Manual Execution
-If you prefer not to use the wizard, you can edit `scenario_bigcodebench.toml` directly and run:
+### Manual Benchmark Execution
+If you prefer direct control, you can edit the `scenario_bigcodebench.toml` and run:
 ```bash
 uv run agentbeats-run scenarios/code_agent_benchmark/scenario_bigcodebench.toml
 ```
 
-### Debugging & Artifacts
-Execution logs and generated code snippets are stored in the gitignored `debug/` folder for easy inspection. Successful runs produce a **"Benchmark Results"** artifact with detailed pass/fail metrics and test outputs.
+### Viewing Results & Debugging
+- **Artifacts**: Every run generates a "Benchmark Results" artifact containing detailed pass/fail metrics.
+- **Debug Logs**: Check the gitignored `debug/` folder for raw agent responses and execution logs.
 
-## 📂 Task Sources
+---
 
-1. **BigCodeBench**: 300+ standard-library-only tasks. Ideal for broad model evaluation.
-2. **Local**: Custom tasks located in `scenarios/code_agent_benchmark/tasks/code_generation`. Best for specialized testing.
+## 📜 Task Sources
+
+1. **BigCodeBench (StdLib)**: Focuses on complex Python logic using only the standard library. [Learn more](BIGCODEBENCH.md).
+2. **Local Tasks**: HumanEval-style tasks stored locally for quick iteration and custom testing.
+
+---
 
 ## 📜 License
-
 This benchmark is part of the AgentBeats tutorial and follows the same license terms.

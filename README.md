@@ -1,6 +1,7 @@
 > This repo is a learning resource - it includes examples and a local assessment runner. When you are ready to build your own agents, we recommend starting from our templates:
 > - [agent-template](https://github.com/RDI-Foundation/agent-template) – for purple agents
 > - [green-agent-template](https://github.com/RDI-Foundation/green-agent-template) – for green agents
+- [code-agent-benchmark](#code-agent-benchmark) – for multi-source coding evaluation
 
 ## Quickstart
 1. Clone the repo
@@ -54,6 +55,12 @@ scenarios/
    ├─ Dockerfile.tau2-agent
    ├─ setup.sh                 # downloads tau2-bench data for local runs
    └─ scenario.toml
+└─ code_agent_benchmark/
+   ├─ evaluator/src/           # green agent (BigCodeBench/Local loader)
+   ├─ agent/src/               # purple agent (baseline generator)
+   ├─ wizard/                  # interactive configuration CLI
+   ├─ tasks/                   # local custom benchmark tasks
+   └─ scenario_bigcodebench.toml
 
 src/agentbeats/                # optional local runner + A2A client helpers (`agentbeats-run`)
 ```
@@ -130,6 +137,18 @@ The debate example is implemented using the same structure as the supported temp
 
 - Green agent: `scenarios/debate/judge/src/` (green-agent-template style)
 - Purple agent: `scenarios/debate/debater/src/` (agent-template style)
+
+### Code Agent Benchmark
+
+The [Code Agent Benchmark](scenarios/code_agent_benchmark/README.md) is a comprehensive suite for evaluating AI agents on Python coding tasks. It supports:
+- **BigCodeBench Integration**: 300+ standard-library tasks.
+- **Interactive Wizard**: A guided setup for providers and models.
+- **Local Task Loading**: Custom evaluation suites.
+
+To run the interactive wizard:
+```bash
+uv run python scenarios/code_agent_benchmark/run_interactive.py
+```
 
 ### Dockerizing Agent
 
