@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Entry point for the AI Code Agent Benchmark interactive wizard."""
 
-import os
 import sys
 from pathlib import Path
 

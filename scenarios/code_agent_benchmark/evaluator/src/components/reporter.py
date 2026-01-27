@@ -1,9 +1,8 @@
 """Reporting and artifact management for the Code Agent Benchmark."""
 
-from typing import List, Dict, Any
 from a2a.server.tasks import TaskUpdater
 from a2a.types import Part, TextPart, DataPart
-from models import TaskResult, BenchmarkResult
+from models import BenchmarkResult
 
 
 class BenchmarkReporter:

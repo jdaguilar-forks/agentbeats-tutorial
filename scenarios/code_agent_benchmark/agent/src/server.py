@@ -13,8 +13,6 @@ from a2a.types import (
 )
 
 from executor import Executor
-import agent
-import sys
 
 
 def main():

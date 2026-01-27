@@ -1,7 +1,6 @@
 """Configuration management for the AI Code Agent Benchmark wizard."""
 
 import json
-import os
 from pathlib import Path
 from typing import Dict, Any
 

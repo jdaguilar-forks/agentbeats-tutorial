@@ -42,7 +42,7 @@ def main():
     stats = loader.get_statistics()
     print(f"Total tasks: {stats['total_tasks']}")
     print(f"Unique libraries: {stats['unique_libraries']}")
-    print(f"Difficulty distribution:")
+    print("Difficulty distribution:")
     for difficulty, count in sorted(stats["difficulties"].items()):
         percentage = (count / stats["total_tasks"]) * 100
         print(f"  {difficulty}: {count} ({percentage:.1f}%)")

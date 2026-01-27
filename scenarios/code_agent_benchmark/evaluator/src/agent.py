@@ -1,17 +1,15 @@
 """Green agent for code agent benchmark evaluation."""
 
 import logging
-import os
-from typing import Any, List, Dict, Optional
+from typing import List
 from pathlib import Path
 
-from pydantic import BaseModel, HttpUrl, ValidationError
 
 from a2a.server.tasks import TaskUpdater
-from a2a.types import DataPart, Message, Part, TaskState, TextPart
+from a2a.types import Message, TaskState
 from a2a.utils import get_message_text, new_agent_text_message
 
-from models import EvalRequest, TaskResult, BenchmarkResult
+from models import EvalRequest
 from messenger import Messenger
 from utils.task_loader import TaskLoader
 from utils.bigcodebench_loader import BigCodeBenchLoader

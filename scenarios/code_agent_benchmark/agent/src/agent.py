@@ -6,7 +6,6 @@ import re
 from dotenv import load_dotenv
 
 from litellm import completion
-import asyncio
 import time
 
 from a2a.server.tasks import TaskUpdater

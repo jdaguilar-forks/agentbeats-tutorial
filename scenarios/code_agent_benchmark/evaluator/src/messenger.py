@@ -1,7 +1,6 @@
 """Messenger utility for A2A communication with purple agents."""
 
 import httpx
-from a2a.types import Message
 from a2a.utils import new_task, new_agent_text_message
 
 

@@ -1,7 +1,7 @@
 """Core orchestration logic for the Code Agent Benchmark."""
 
 import logging
-from typing import List, Dict, Any
+from typing import Dict, Any
 from a2a.server.tasks import TaskUpdater
 from a2a.types import TaskState
 from a2a.utils import new_agent_text_message
@@ -120,8 +120,8 @@ class BenchmarkOrchestrator:
             prompt = task["prompt"]
             task_description = f"""You are solving a coding task. Please provide ONLY the Python code for the function requested.
 
-Task: {task['title']}
-Description: {task['description']}
+Task: {task["title"]}
+Description: {task["description"]}
 
 {prompt}
 
