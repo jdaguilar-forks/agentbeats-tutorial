@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 from dotenv import load_dotenv
 
 from litellm import completion
@@ -31,11 +32,37 @@ os.environ["LITELLM_SET_VERBOSE"] = "True"
 
 
 class Agent:
-    """Purple agent that solves coding tasks using an LLM via Open Router."""
+    """Purple agent that solves coding tasks using an LLM."""
 
     def __init__(self, model: str = "google/gemini-2.0-flash-exp:free"):
         self.model = model
         logger.info(f"Initialized code agent with model: {model}")
+
+    def _clean_code(self, code: str) -> str:
+        """Strip markdown markers and extra text."""
+        # Find content inside ```python ... ``` or ``` ... ```
+        match = re.search(r"```(?:python)?\n?(.*?)```", code, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+
+        # Fallback: if no markers, try to find the start of code (imports or defs)
+        lines = code.split("\n")
+        cleaned_lines = []
+        in_code = False
+        for line in lines:
+            if not in_code and (
+                line.strip().startswith("import ")
+                or line.strip().startswith("from ")
+                or line.strip().startswith("def ")
+            ):
+                in_code = True
+            if in_code:
+                cleaned_lines.append(line)
+
+        if cleaned_lines:
+            return "\n".join(cleaned_lines).strip()
+
+        return code.strip()
 
     async def run(self, message: Message, updater: TaskUpdater) -> None:
         """Solve a coding task."""
@@ -51,11 +78,16 @@ class Agent:
             logger.info(f"Generating code solution with model: {self.model}")
             logger.info(f"Task description length: {len(task_description)} characters")
 
-            system_prompt = """You are an expert Python programmer. You will be given a coding task with a function signature and description.
-Your job is to implement the function correctly.
+            system_prompt = """You are an expert Python programmer.
+Your task is to provide ONLY raw Python code. 
 
-IMPORTANT: Return ONLY the Python code. Do not include markdown formatting, explanations, or any other text.
-Include all necessary imports at the top of your response."""
+RULES:
+1. Do NOT use markdown code blocks (e.g., no ```python).
+2. Do NOT provide any explanations, comments (unless inside the code), or conversational filler.
+3. Provide ONLY the complete Python implementation including necessary imports.
+4. Your response must be directly executable as a .py file.
+
+Fail to follow these rules will break the evaluation system."""
 
             logger.info("Sending request to Open Router...")
             logger.info(f"Using model: {self.model}")
@@ -125,8 +157,10 @@ Include all necessary imports at the top of your response."""
             code_filepath = os.path.join(temp_dir, code_filename)
 
             try:
+                # Clean code solution before writing (removes markdown blocks)
+                cleaned_code = self._clean_code(code_solution)
                 with open(code_filepath, "w") as f:
-                    f.write(code_solution)
+                    f.write(cleaned_code)
                 logger.info(f"Code solution written to: {code_filepath}")
 
                 # Return the file path instead of the code

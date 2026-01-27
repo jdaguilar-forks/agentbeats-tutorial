@@ -29,13 +29,46 @@ class BenchmarkOrchestrator:
         self.reporter = BenchmarkReporter()
 
     def _clean_code_submission(self, submission: str) -> str:
-        """Remove markdown code blocks and extra formatting from submission."""
-        lines = submission.strip().split("\n")
-        if lines and lines[0].startswith("```"):
-            lines = lines[1:]
-        if lines and lines[-1].startswith("```"):
-            lines = lines[:-1]
-        return "\n".join(lines).strip()
+        """Robustly extract Python code from model response."""
+        import re
+
+        # Trim whitespace
+        submission = submission.strip()
+
+        # Try to find content inside triple backticks
+        # Supports ```python code ``` or just ``` code ```
+        code_blocks = re.findall(r"```(?:python)?\n?(.*?)```", submission, re.DOTALL)
+
+        if code_blocks:
+            # If multiple blocks, pick the one that looks most like code (has def/import)
+            # or just the first one if unsure
+            for block in code_blocks:
+                if "def " in block or "import " in block:
+                    return block.strip()
+            return code_blocks[0].strip()
+
+        # If no backticks, try to remove common conversational headers/footers
+        # (Though refined prompts should minimize this)
+        lines = submission.split("\n")
+        cleaned_lines = []
+        in_code = False
+
+        # Heuristic: start keeping lines from first import or def
+        for line in lines:
+            if not in_code and (
+                line.strip().startswith("import ")
+                or line.strip().startswith("from ")
+                or line.strip().startswith("def ")
+            ):
+                in_code = True
+
+            if in_code:
+                cleaned_lines.append(line)
+
+        if cleaned_lines:
+            return "\n".join(cleaned_lines).strip()
+
+        return submission.strip()
 
     async def run_benchmark(
         self,
