@@ -2,6 +2,35 @@
 
 A robust, multi-source evaluation suite for testing AI coding agents on realistic Python tasks. This benchmark supports both industry-standard datasets and local custom task suites, all within a standardized inter-agent communication framework.
 
+## 🏗️ Architecture Overview
+
+The benchmark follows a strictly decoupled architecture, separating the configuration, execution, and reporting phases.
+
+```mermaid
+graph TD
+    User([User]) -- "1. Start" --> Wizard[Interactive Wizard]
+    Wizard -- "2. Configures" --> TOML[scenario_config.toml]
+    
+    subgraph GreenAgent ["Evaluator (Green Agent)"]
+        Orchestrator[Orchestrator]
+        Loader[Task Loader]
+        Reporter[Reporter]
+    end
+    
+    TOML -- "3. Read Config" --> Orchestrator
+    Loader -- "4. Fetch Tasks (BigCodeBench/Local)" --> Orchestrator
+    
+    subgraph Agents ["Inter-Agent Communication (A2A)"]
+        Orchestrator -- "5. Request Code" --> PurpleAgent["Generator (Purple Agent)"]
+        PurpleAgent -- "6. Submit Code Solution" --> Orchestrator
+    end
+    
+    Orchestrator -- "7. Verify & Score" --> Env["Testing Environment"]
+    Env --> Reporter
+    Reporter -- "8. Generate Results" --> Artifacts[Benchmark Artifacts]
+    Reporter -- "9. Logs" --> Debug[Debug Logs]
+```
+
 ---
 
 ## ⚡ Quickstart
