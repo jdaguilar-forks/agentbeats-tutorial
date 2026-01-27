@@ -20,6 +20,13 @@ class BenchmarkWizard:
         self.model_selector = ModelSelector()
         self.root_dir = root_dir
 
+    def _ensure_provider_prefix(self, provider_id: str, model_id: str) -> str:
+        """Ensure model ID has correct provider prefix if needed."""
+        # 1 is OpenRouter
+        if provider_id == "1" and not model_id.startswith("openrouter/"):
+            return f"openrouter/{model_id}"
+        return model_id
+
     def run(self):
         """Execute the full wizard workflow."""
         WizardUI.print_banner()
@@ -41,6 +48,7 @@ class BenchmarkWizard:
                 f"Select Model for Generator ({self.model_selector.PROVIDERS[gen_prov_id]['name']})",
                 gen_models,
             )
+            gen_model = self._ensure_provider_prefix(gen_prov_id, gen_model)
 
             # Check Key
             key_name = self.model_selector.check_api_key(gen_prov_id)
@@ -61,6 +69,7 @@ class BenchmarkWizard:
                 f"Select Model for Evaluator ({self.model_selector.PROVIDERS[eval_prov_id]['name']})",
                 eval_models,
             )
+            eval_model = self._ensure_provider_prefix(eval_prov_id, eval_model)
 
             # Check Key
             key_name = self.model_selector.check_api_key(eval_prov_id)

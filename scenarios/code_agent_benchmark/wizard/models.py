@@ -43,17 +43,25 @@ class ModelSelector:
             for m in data.get("data", []):
                 # Filter for some common coding models if list is too long
                 m_id = m.get("id", "")
+                if not m_id.startswith("openrouter/"):
+                    m_id = f"openrouter/{m_id}"
                 name = m.get("name", m_id)
                 models.append({"id": m_id, "name": name})
             return models[:20]  # Just show top 20
         except Exception:
             return [
                 {
-                    "id": "google/gemini-2.0-flash-exp:free",
+                    "id": "openrouter/google/gemini-2.0-flash-exp:free",
                     "name": "Gemini 2.0 Flash (Free)",
                 },
-                {"id": "anthropic/claude-3.5-sonnet", "name": "Claude 3.5 Sonnet"},
-                {"id": "meta-llama/llama-3.1-405b-instruct", "name": "Llama 3.1 405B"},
+                {
+                    "id": "openrouter/anthropic/claude-3.5-sonnet",
+                    "name": "Claude 3.5 Sonnet",
+                },
+                {
+                    "id": "openrouter/meta-llama/llama-3.1-405b-instruct",
+                    "name": "Llama 3.1 405B",
+                },
             ]
 
     def get_models_for_provider(self, provider_id: str) -> List[Dict[str, str]]:
